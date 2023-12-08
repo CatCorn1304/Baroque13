@@ -10,7 +10,7 @@ public class OilPaintingEffect : ScriptableRendererFeature
 
     public Settings settings;
 
-    private OilPaintingEffectPass renderPass;
+    OilPaintingEffectPass renderPass;
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
@@ -22,8 +22,9 @@ public class OilPaintingEffect : ScriptableRendererFeature
     {
         var structureTensorMaterial = CoreUtils.CreateEngineMaterial("Hidden/Oil Painting/Structure Tensor");
         var kuwaharaFilterMaterial = CoreUtils.CreateEngineMaterial("Hidden/Oil Painting/Anisotropic Kuwahara Filter");
+        var lineIntegralConvolutionMaterial = CoreUtils.CreateEngineMaterial("Hidden/Oil Painting/Line Integral Convolution");
 
-        renderPass = new OilPaintingEffectPass(structureTensorMaterial,kuwaharaFilterMaterial);
+        renderPass = new OilPaintingEffectPass(structureTensorMaterial, kuwaharaFilterMaterial,lineIntegralConvolutionMaterial);
         renderPass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         
         var texture = new Texture2D(FilterKernelSize, FilterKernelSize, TextureFormat.RFloat, true);
@@ -142,8 +143,10 @@ private static void GaussianBlur(Texture2D texture, float sigma)
     public class Settings
     {
         public AnisotropicKuwaharaFilterSettings anisotropicKuwaharaFilterSettings;
+        public EdgeFlowSettings edgeFlowSettings;
     }
-    [Serializable]
+
+[Serializable]
 public class AnisotropicKuwaharaFilterSettings
 {
     [Range(3, 8)]
@@ -163,4 +166,16 @@ public class AnisotropicKuwaharaFilterSettings
     [Range(1, 4)]
     public int iterations = 1;
 }
+
+    [Serializable]
+    public class EdgeFlowSettings
+    {
+        public Texture2D noiseTexture;
+
+        [Range(1, 64)]
+        public int streamLineLength = 10;
+        [Range(0f, 2f)]
+        public float streamKernelStrength = 0.5f;
+    }
+
 }

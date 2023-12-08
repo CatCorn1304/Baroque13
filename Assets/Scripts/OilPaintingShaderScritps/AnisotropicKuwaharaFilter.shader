@@ -3,6 +3,7 @@ Shader "Hidden/Oil Painting/Anisotropic Kuwahara Filter"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        [NoScaleOffset] _NoiseTex ("Noise Texture", 2D) = "white" {}
 
         _StructureTensorTex ("Structure Tensor", 2D) = "white" {}
 
@@ -24,6 +25,9 @@ Shader "Hidden/Oil Painting/Anisotropic Kuwahara Filter"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
             
+            #define SCREEN_WIDTH _ScreenParams.x
+            #define SCREEN_HEIGHT _ScreenParams.y
+            #define SCREEN_SIZE _ScreenParams.xy
             #define PIXEL_X (_ScreenParams.z - 1)
             #define PIXEL_Y (_ScreenParams.w - 1)
 
@@ -31,6 +35,11 @@ Shader "Hidden/Oil Painting/Anisotropic Kuwahara Filter"
     
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
+
+            TEXTURE2D(_NoiseTex);
+            SAMPLER(sampler_NoiseTex);
+            float4 _NoiseTex_TexelSize; 
+
 
             TEXTURE2D(_StructureTensorTex);
             SAMPLER(sampler_StructureTensorTex);
@@ -72,6 +81,13 @@ Shader "Hidden/Oil Painting/Anisotropic Kuwahara Filter"
             {
                 return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv).rgb;
             }
+
+            float3 SampleNoise(float2 uv)
+{
+    float x = uv.x * SCREEN_WIDTH / _NoiseTex_TexelSize.z;
+    float y = uv.y * SCREEN_HEIGHT / _NoiseTex_TexelSize.w;
+    return SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, float2(x, y));
+}
             
             float4 SampleStructureTensor(float2 uv)
             {
@@ -107,6 +123,20 @@ Shader "Hidden/Oil Painting/Anisotropic Kuwahara Filter"
 
                 return r;
             }
+
+             float2 SampleMain(float2 uv)
+ {
+     return SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv).rg;
+ }
+ 
+float2 GetVectorField(float2 uv)
+{
+    float2 g = SampleMain(uv);
+    
+    float norm = length(g);
+    
+    return norm == 0 ? float2(0, 0) : g / norm;
+}
 
             half4 frag(Varyings input) : SV_Target
             {

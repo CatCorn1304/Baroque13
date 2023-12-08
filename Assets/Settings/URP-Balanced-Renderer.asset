@@ -53,7 +53,8 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: -1878332245247344467}
-  m_RendererFeatureMap: adc0de57c6d2eee5
+  - {fileID: 874786540700558080}
+  m_RendererFeatureMap: adc0de57c6d2eee500e3bf54b9dd230c
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -92,7 +93,32 @@ MonoBehaviour:
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
-  m_DepthPrimingMode: 0
+  m_DepthPrimingMode: 1
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &874786540700558080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93a862612ecb9b4d92d108f13312783, type: 3}
+  m_Name: OilPaintingEffect
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    anisotropicKuwaharaFilterSettings:
+      filterKernelSectors: 8
+      filterKernelSmoothness: 0.33
+      filterRadius: 4
+      filterSharpness: 8
+      eccentricity: 1
+      iterations: 1
+    edgeFlowSettings:
+      noiseTexture: {fileID: 2800000, guid: 7fb947fcd746f8544b4086915a2d3bcd, type: 3}
+      streamLineLength: 10
+      streamKernelStrength: 0.5
