@@ -72,5 +72,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 #Local Settings for every developer
-/ProjectSettings/ShaderGraphSettings.asset
-/Assets/Plugins/
+ProjectSettings/ShaderGraphSettings.asset
+Assets/Plugins/
