@@ -11,7 +11,7 @@ public class FlyCamera : MonoBehaviour
 
 	Vector3 velocity; // current velocity
 
-	static bool Focused
+	/* static bool Focused
 	{
 		get => Cursor.lockState == CursorLockMode.Locked;
 		set
@@ -26,15 +26,15 @@ public class FlyCamera : MonoBehaviour
 		if (focusOnEnable) Focused = true;
 	}
 
-	void OnDisable() => Focused = false;
+	void OnDisable() => Focused = false;*/
 
 	void Update()
 	{
 		// Input
-		if (Focused)
+		/*if (Focused)
 			UpdateInput();
 		else if (Input.GetMouseButtonDown(0))
-			Focused = true;
+			Focused = true; */
 
 		// Physics
 		velocity = Vector3.Lerp(velocity, Vector3.zero, dampingCoefficient * Time.deltaTime);
@@ -54,8 +54,8 @@ public class FlyCamera : MonoBehaviour
 		transform.rotation = horiz * rotation * vert;
 
 		// Leave cursor lock
-		if (Input.GetKeyDown(KeyCode.Escape))
-			Focused = false;
+		//if (Input.GetKeyDown(KeyCode.Escape))
+			//Focused = false;
 	}
 
 	Vector3 GetAccelerationVector()
